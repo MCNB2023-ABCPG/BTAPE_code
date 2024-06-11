@@ -1,4 +1,4 @@
-function A_preprocessing(folder_path_root, folder_base_pipeline, spm_path)
+function A_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 %
 % Ideas for general structure from:
 % https://github.com/phildean/SPM_fMRI_Example_Pipeline/blob/master/preprocess.m
@@ -43,7 +43,8 @@ spm_jobman('initcfg')
 switch_prep = [1 2 3 4 5];
 
 
-load(fullfile(folder_path_root, 'code', 'exp_var.mat'))
+%load(fullfile(folder_path_root, 'code', 'exp_var.mat'))
+load(fullfile(folder_path_code, 'exp_var.mat'))
 
 for s=1:numel(sub_all)
     sub = strcat('sub-', sub_all{s});
