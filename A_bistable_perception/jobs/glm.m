@@ -1,5 +1,5 @@
 function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions)
-    job = [];
+
     job{1}.spm.stats.fmri_spec.dir = {folder_path_derivative_glm};
     job{1}.spm.stats.fmri_spec.timing.units = 'secs';
     job{1}.spm.stats.fmri_spec.timing.RT = 1;
@@ -22,8 +22,7 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).name = conditions{j}.name;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).onset = onset;
-    %job{1}.spm.stats.fmri_spec.sess(i).cond(j).onset = [160];
-    job{1}.spm.stats.fmri_spec.sess(i).cond(j).duration = 8;
+    job{1}.spm.stats.fmri_spec.sess(i).cond(j).duration = 24;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).tmod = 0;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).pmod = struct('name', {}, 'param', {}, 'poly', {});
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).orth = 1;

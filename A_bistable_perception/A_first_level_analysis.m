@@ -1,4 +1,4 @@
-function B_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+function A_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % initialization
 addpath(spm_path)
@@ -8,37 +8,35 @@ spm_jobman('initcfg')
 % specifying the steps: fill in switch_prep
 % 1 - model specification and estimation
 % 2 - contrast
-switch_prep = [];
+switch_prep = [1 2];
 save_conditions = 1;
 save_constrasts = 1;
 
 load(fullfile(folder_path_code, 'exp_var.mat'))
 
 conditions = [];
-conditions{1}.name = 'Left';
+conditions{1}.name = 'A';
 conditions{1}.identity = 1;
-conditions{2}.name = 'Right';
+conditions{2}.name = 'S';
 conditions{2}.identity = 2;
 
+n_run = numel(folder_base_pipeline.runNameFunc);
+
 contrasts = [];
-contrasts{1}.name = 'Left>Null';
-%contrasts{1}.weights = [1 0 1 0 0 0];
-contrasts{1}.weights = [1 0 0];
+contrasts{1}.name = 'A>Null';
+contrasts{1}.weights = [repmat([1 0],1,n_run) repelem(0,n_run)];
 contrasts{1}.sessrep = 'none';
 
-contrasts{2}.name = 'Right>Null';
-%contrasts{2}.weights = [0 1 0 1 0 0];
-contrasts{2}.weights = [0 1 0];
+contrasts{2}.name = 'S>Null';
+contrasts{2}.weights = [repmat([0 1],1,n_run) repelem(0,n_run)];
 contrasts{2}.sessrep = 'none';
 
-contrasts{3}.name = 'Left>Right';
-%contrasts{3}.weights = [1 -1 1 -1 0 0];
-contrasts{3}.weights = [1 -1 0];
+contrasts{3}.name = 'A>S';
+contrasts{3}.weights = [repmat([1 -1],1,n_run) repelem(0,n_run)];
 contrasts{3}.sessrep = 'none';
 
-contrasts{4}.name = 'Right>Left';
-%contrasts{4}.weights = [-1 1 -1 1 0 0];
-contrasts{4}.weights = [-1 1 0];
+contrasts{4}.name = 'S>A';
+contrasts{4}.weights = [repmat([-1 1],1,n_run) repelem(0,n_run)];
 contrasts{4}.sessrep = 'none';
 
 if save_conditions == 1
@@ -52,7 +50,6 @@ if save_constrasts == 1
     filepath = fullfile(folder_path_code, folder_base_pipeline.name{:});
     save(fullfile(filepath,filename), 'contrasts');
 end
-
 
 
 for s=1:numel(sub_all)

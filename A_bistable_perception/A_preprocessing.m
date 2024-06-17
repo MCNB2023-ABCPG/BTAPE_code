@@ -128,6 +128,13 @@ for s=1:numel(sub_all)
         
             % run
             normalization(file_path_str_y,file_path_volumes)
+
+            % select anatomical volumes
+            file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_str, '^.*\.nii$'));
+        
+            % run
+            normalization(file_path_str_y,file_path_volumes)
+
         end
         
         % SMOOTHING
