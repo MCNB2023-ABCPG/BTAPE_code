@@ -1,4 +1,4 @@
-function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions)
+function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions, s, file_path_info, add_motion)
 
     job{1}.spm.stats.fmri_spec.dir = {folder_path_derivative_glm};
     job{1}.spm.stats.fmri_spec.timing.units = 'secs';
@@ -18,8 +18,10 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
     for j = 1:numel(conditions)
     condition = conditions{j}.identity;
-    onset = get_onset(file_path_log, condition);
 
+    %onset = get_onset(file_path_log, condition);
+    onset = get_onset_ext(file_path_log, file_path_info, condition, s);
+    
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).name = conditions{j}.name;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).onset = onset;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).duration = 24;
@@ -29,7 +31,13 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
     job{1}.spm.stats.fmri_spec.sess(i).multi = {''};
     job{1}.spm.stats.fmri_spec.sess(i).regress = struct('name', {}, 'val', {});
-    job{1}.spm.stats.fmri_spec.sess(i).multi_reg = {''};
+    if add_motion == 1
+        pattern = strcat('^rp.*','run-', run_ses{i}, '.*\.txt$');
+        file_path_motion = spm_select('FPList', folder_path_derivative_func, pattern);
+        job{1}.spm.stats.fmri_spec.sess(i).multi_reg = {file_path_motion};
+    else
+        job{1}.spm.stats.fmri_spec.sess(i).multi_reg = {''};
+    end
     job{1}.spm.stats.fmri_spec.sess(i).hpf = 128;
 
     job{1}.spm.stats.fmri_spec.fact = struct('name', {}, 'levels', {});
