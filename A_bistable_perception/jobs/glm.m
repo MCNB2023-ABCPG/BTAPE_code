@@ -20,7 +20,7 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
     condition = conditions{j}.identity;
 
     %onset = get_onset(file_path_log, condition);
-    onset = get_onset_ext(file_path_log, file_path_info, condition, s);
+    onset = get_onset_ext(file_path_log, file_path_info, condition, s, 1);
     
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).name = conditions{j}.name;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).onset = onset;

@@ -35,7 +35,7 @@ end
 %A_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % first-level analysis
-A_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+%A_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 
 % -------- CLEANUP -------- %

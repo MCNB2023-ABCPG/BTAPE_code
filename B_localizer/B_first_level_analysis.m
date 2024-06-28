@@ -8,38 +8,44 @@ spm_jobman('initcfg')
 % specifying the steps: fill in switch_prep
 % 1 - model specification and estimation
 % 2 - contrast
-switch_prep = [];
+switch_prep = [1 2];
 save_conditions = 1;
 save_constrasts = 1;
 
 load(fullfile(folder_path_code, 'exp_var.mat'))
 
 conditions = [];
-conditions{1}.name = 'Left';
+conditions{1}.name = 'L';
 conditions{1}.identity = 1;
-conditions{2}.name = 'Right';
+conditions{2}.name = 'R';
 conditions{2}.identity = 2;
 
+% add motion parameters
+add_motion = 1;
+
+n_run = numel(folder_base_pipeline.runNameFunc);
+
 contrasts = [];
-contrasts{1}.name = 'Left>Null';
-%contrasts{1}.weights = [1 0 1 0 0 0];
-contrasts{1}.weights = [1 0 0];
-contrasts{1}.sessrep = 'none';
+contrasts{1}.name = 'L>Null';
+%contrasts{1}.weights = [repmat([1 0],1,n_run) repelem(0,6) repelem(0,n_run)];
+contrasts{1}.weights = [1 0 repelem(0,6)];
+contrasts{1}.sessrep = 'replsc';
 
-contrasts{2}.name = 'Right>Null';
-%contrasts{2}.weights = [0 1 0 1 0 0];
-contrasts{2}.weights = [0 1 0];
-contrasts{2}.sessrep = 'none';
+contrasts{2}.name = 'R>Null';
+%contrasts{2}.weights = [repmat([0 1],1,n_run) repelem(0,6) repelem(0,n_run)];
+contrasts{2}.weights = [0 1 repelem(0,6)];
+contrasts{2}.sessrep = 'replsc';
 
-contrasts{3}.name = 'Left>Right';
-%contrasts{3}.weights = [1 -1 1 -1 0 0];
-contrasts{3}.weights = [1 -1 0];
-contrasts{3}.sessrep = 'none';
+contrasts{3}.name = 'L>R';
+%contrasts{3}.weights = [repmat([1 -1],1,n_run) repelem(0,6) repelem(0,n_run)];
+contrasts{3}.weights = [1 -1 repelem(0,6)];
+contrasts{3}.sessrep = 'replsc';
 
-contrasts{4}.name = 'Right>Left';
-%contrasts{4}.weights = [-1 1 -1 1 0 0];
-contrasts{4}.weights = [-1 1 0];
-contrasts{4}.sessrep = 'none';
+contrasts{4}.name = 'R>L';
+%contrasts{4}.weights = [repmat([-1 1],1,n_run) repelem(0,6) repelem(0,n_run)];
+contrasts{4}.weights = [-1 1 repelem(0,6)];
+contrasts{4}.sessrep = 'replsc';
+
 
 if save_conditions == 1
     filename = strcat(folder_base_pipeline.name{:},'_conditions.mat');
@@ -52,7 +58,6 @@ if save_constrasts == 1
     filepath = fullfile(folder_path_code, folder_base_pipeline.name{:});
     save(fullfile(filepath,filename), 'contrasts');
 end
-
 
 
 for s=1:numel(sub_all)
@@ -79,7 +84,8 @@ for s=1:numel(sub_all)
         folder_path_derivative_func = fullfile(folder_path_derivative_ses, 'func');
         folder_path_derivative_glm = fullfile(folder_path_derivative_ses, 'glm');
 
-        folder_path_log = fullfile(folder_path_root,sub,'func');
+        folder_path_log = fullfile(folder_path_root,sub, 'func');
+        file_path_info = fullfile(folder_path_root, 'derivatives', 'BTAPE_info', 'BTAPE-sub-Data_clean.xlsx');
         
         folder_path_str = folder_path_derivative_anat;
         folder_path_run = folder_path_derivative_func;
@@ -91,7 +97,7 @@ for s=1:numel(sub_all)
         if any(switch_prep == 1)
 
             % run
-            glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions);
+            glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions, s, file_path_info, add_motion);
         end
 
 

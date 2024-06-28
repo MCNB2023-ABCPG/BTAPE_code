@@ -8,7 +8,7 @@ spm_jobman('initcfg')
 % specifying the steps: fill in switch_prep
 % 1 - model specification and estimation
 % 2 - contrast
-switch_prep = [2];
+switch_prep = [1 2];
 save_conditions = 1;
 save_constrasts = 1;
 
