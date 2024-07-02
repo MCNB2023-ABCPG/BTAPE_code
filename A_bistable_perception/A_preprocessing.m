@@ -40,7 +40,7 @@ spm_jobman('initcfg')
 % 3 - segment
 % 4 - normalise
 % 5 - smooth
-switch_prep = [4 5];
+switch_prep = [1 2 3 4 5 6];
 
 
 %load(fullfile(folder_path_root, 'code', 'exp_var.mat'))
@@ -96,7 +96,7 @@ for s=1:numel(sub_all)
         % COREGISTER
         if any(switch_prep == 2)
             % select the structural source
-            file_path_str = spm_select('ExtFPListRec', folder_path_str, '^.*\.nii$', 1);
+            file_path_str = spm_select('ExtFPListRec', folder_path_str, '^sub.*\.nii$', 1);
             
             % select mean image as reference
             file_path_mean = spm_select('ExtFPListRec', folder_path_run, '^mean.*\.nii', 1);
@@ -112,7 +112,7 @@ for s=1:numel(sub_all)
             spm_path_nii_list = cellstr([repmat(spm_path_nii,6,1) strcat(',',num2str([1:6]'))]);
             
             % select structural
-            file_path_str = spm_select('ExtFPListRec', folder_path_str, '^.*\.nii$', 1);
+            file_path_str = spm_select('ExtFPListRec', folder_path_str, '^sub.*\.nii$', 1);
         
             % run
             segmentation(file_path_str, spm_path_nii_list)
@@ -144,6 +144,102 @@ for s=1:numel(sub_all)
         
             % run
             smoothing(file_path_volumes_norm)
+
+
+            % select normalized volumes
+            file_path_volumes_norm = cellstr(spm_select('ExtFPListRec', folder_path_str, '^w.*\.nii$'));
+        
+            % run
+            smoothing(file_path_volumes_norm)
+
+        end
+        
+        % CREATE MASK
+        if any(switch_prep==6)
+            outdir = cellstr(folder_path_derivative_anat);
+            
+            % grey matter thresh
+            input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc1.*\.nii$'));
+            output = 'mask_grey';
+            expression = 'i1 > 0.4';
+            create_mask(input, output, outdir, expression);
+
+            % grey matter smooth
+            mask = cellstr(spm_select('FPList', folder_path_str, '^mask_grey.*$'));
+            smoothing(mask);
+
+            % rethresh
+            input1 = cellstr(spm_select('FPList', folder_path_derivative_anat, '^smask_grey.*$'));
+            %input2 = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc[4-5].*$'));
+            input2 = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc4.*$'));
+            input3 = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc5.*$'));
+            %input4 = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc2.*$'));
+
+            input = [input1 ; input2; input3];
+            %input = [input1 ; input2];
+            output = 'smask_all_rethresh';
+            expression = '(i1 > 0) & (i2 < 0.5) & (i3 < 0.5)';
+            create_mask(input, output, outdir, expression)
+
+
+            % TODO
+            % 1 - grey matter mask
+            % 2 - grey matter mask smoothed
+            % 3 - grey and white matter
+            % 4 - grey and white matter smoothed
+            mode = 1;
+
+            switch 0
+                case 1
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc1.*\.nii$'));
+                    output = 'mask_grey';
+                    expression = 'i1 > 0.2';
+                    create_mask(input, output, outdir, expression)
+
+                case 2
+                    % thresh
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc1.*\.nii$'));
+                    output = 'mask_grey';
+                    expression = 'i1 > 0.2';
+                    create_mask(input, output, outdir, expression);
+
+                    % smooth
+                    mask = cellstr(spm_select('FPList', folder_path_str, '^mask_grey.*$'));
+                    smoothing(mask);
+
+                    % rethresh
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^smask_grey.*$'));
+                    output = 'smask_grey_rethresh';
+                    expression = 'i1 > 0';
+                    create_mask(input, output, outdir, expression)
+                    
+                case 3
+                case 4
+                    % thresh
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc1.*\.nii$'));
+                    output = 'mask_grey';
+                    expression = 'i1 > 0.2';
+                    create_mask(input, output, outdir, expression);
+
+                    % thresh
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^wc2.*\.nii$'));
+                    output = 'mask_white';
+                    expression = 'i1 > 0.2';
+                    create_mask(input, output, outdir, expression);
+
+                    % smooth
+                    mask = cellstr(spm_select('FPList', folder_path_str, '^mask_.*$'));
+                    smoothing(mask);
+
+                    % rethresh
+                    input = cellstr(spm_select('FPList', folder_path_derivative_anat, '^smask_.*$'));
+                    output = 'smask_both_rethresh';
+                    expression = '(i1 + i2) > 0';
+                    create_mask(input, output, outdir, expression)
+
+            end
+            
+
         end
 
 

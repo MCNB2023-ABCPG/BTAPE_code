@@ -1,5 +1,6 @@
-function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions, s, file_path_info, add_motion)
-
+function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_derivative_anat, folder_path_log, run_ses, conditions, s, file_path_info, add_motion, add_mask)
+    
+    job = [];
     job{1}.spm.stats.fmri_spec.dir = {folder_path_derivative_glm};
     job{1}.spm.stats.fmri_spec.timing.units = 'secs';
     job{1}.spm.stats.fmri_spec.timing.RT = 1;
@@ -31,7 +32,8 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
     job{1}.spm.stats.fmri_spec.sess(i).multi = {''};
     job{1}.spm.stats.fmri_spec.sess(i).regress = struct('name', {}, 'val', {});
-    if add_motion == 1
+
+    if add_motion
         pattern = strcat('^rp.*','run-', run_ses{i}, '.*\.txt$');
         file_path_motion = spm_select('FPList', folder_path_derivative_func, pattern);
         job{1}.spm.stats.fmri_spec.sess(i).multi_reg = {file_path_motion};
@@ -44,8 +46,15 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
     job{1}.spm.stats.fmri_spec.bases.hrf.derivs = [0 0];
     job{1}.spm.stats.fmri_spec.volt = 1;
     job{1}.spm.stats.fmri_spec.global = 'None';
-    job{1}.spm.stats.fmri_spec.mthresh = 0.8;
-    job{1}.spm.stats.fmri_spec.mask = {''};
+
+
+    if add_mask
+    mask = spm_select('ExtFPListRec', folder_path_derivative_anat, '^smask_all_rethresh.*$');
+    job{1}.spm.stats.fmri_spec.mthresh = 0.2;
+    job{1}.spm.stats.fmri_spec.mask = {mask};
+    end
+
+
     job{1}.spm.stats.fmri_spec.cvi = 'AR(1)';
     %job{1}.spm.stats.fmri_spec.cvi = 'none';
     

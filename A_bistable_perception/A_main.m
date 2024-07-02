@@ -29,13 +29,13 @@ end
 
 % -------- DATA MANIPULATION -------- %
 % copy files to derivative
-%copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % preprocessing
-%A_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+A_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % first-level analysis
-%A_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+A_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 
 % -------- CLEANUP -------- %

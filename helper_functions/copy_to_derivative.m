@@ -3,6 +3,7 @@ function copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, fo
 %load(fullfile(folder_path_root,'code','exp_var.mat'))
 load(fullfile(folder_path_code, 'exp_var.mat'));
 
+
 for s=1:numel(sub_all)
     sub = strcat('sub-', sub_all{s});
     folder_path_sub = fullfile(folder_path_root, sub);

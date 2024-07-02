@@ -1,4 +1,4 @@
-function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions, s, file_path_info, add_motion)
+function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_derivative_anat, folder_path_log, run_ses, conditions, s, file_path_info, add_motion, add_mask)
 
     job{1}.spm.stats.fmri_spec.dir = {folder_path_derivative_glm};
     job{1}.spm.stats.fmri_spec.timing.units = 'secs';
@@ -44,8 +44,13 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
     job{1}.spm.stats.fmri_spec.bases.hrf.derivs = [0 0];
     job{1}.spm.stats.fmri_spec.volt = 1;
     job{1}.spm.stats.fmri_spec.global = 'None';
-    job{1}.spm.stats.fmri_spec.mthresh = 0.8;
-    job{1}.spm.stats.fmri_spec.mask = {''};
+
+    if add_mask
+    mask = spm_select('ExtFPListRec', folder_path_derivative_anat, '^swc1.*\.nii$');
+    job{1}.spm.stats.fmri_spec.mthresh = 0.2;
+    job{1}.spm.stats.fmri_spec.mask = {mask};
+    end
+
     job{1}.spm.stats.fmri_spec.cvi = 'AR(1)';
     %job{1}.spm.stats.fmri_spec.cvi = 'none';
     

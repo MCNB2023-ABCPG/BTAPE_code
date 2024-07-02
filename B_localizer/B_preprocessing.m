@@ -40,7 +40,7 @@ spm_jobman('initcfg')
 % 3 - segment
 % 4 - normalise
 % 5 - smooth
-switch_prep = [4 5];
+switch_prep = [1 2 3 4 5];
 
 
 %load(fullfile(folder_path_root, 'code', 'exp_var.mat'))
