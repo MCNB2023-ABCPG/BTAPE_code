@@ -25,7 +25,7 @@ conditions{2}.identity = 2;
 add_motion = 1;
 
 % add matter mask
-add_mask = 1;
+add_mask = 0;
 
 n_run = numel(folder_base_pipeline.runNameFunc);
 

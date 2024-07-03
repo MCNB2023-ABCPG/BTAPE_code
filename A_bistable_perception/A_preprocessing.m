@@ -40,7 +40,7 @@ spm_jobman('initcfg')
 % 3 - segment
 % 4 - normalise
 % 5 - smooth
-switch_prep = [1 2 3 4 5 6];
+switch_prep = [1 2 3 4 5];
 
 
 %load(fullfile(folder_path_root, 'code', 'exp_var.mat'))
@@ -102,7 +102,7 @@ for s=1:numel(sub_all)
             file_path_mean = spm_select('ExtFPListRec', folder_path_run, '^mean.*\.nii', 1);
         
             %run
-            coregistration(file_path_str, file_path_mean)
+            coregistration(file_path_mean, file_path_str)
         end
         
         % SEGMENTATION
@@ -127,7 +127,7 @@ for s=1:numel(sub_all)
             file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_run, '^sub.*\.nii$', 1:360));
         
             % run
-            normalization(file_path_str_y,file_path_volumes)
+            normalization(file_path_str_y, file_path_volumes)
 
             % select anatomical volumes
             file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_str, '^.*\.nii$'));
