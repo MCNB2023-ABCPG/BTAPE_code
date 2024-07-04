@@ -121,19 +121,25 @@ for s=1:numel(sub_all)
         % NORMALIZATION
         if any(switch_prep == 4)
             % select deformation field from segmentation
-            file_path_str_y = spm_select('FPList', folder_path_str, '^y_.*\.nii$');
+            file_path_str_y = spm_select('FPList', folder_path_str, '^y_sub.*\.nii$');
         
             % select volumes
             file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_run, '^sub.*\.nii$', 1:360));
-        
-            % run
-            normalization(file_path_str_y, file_path_volumes)
+            voxel_size = [2 2 2];
 
-            % select anatomical volumes
-            file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_str, '^.*\.nii$'));
-        
             % run
-            normalization(file_path_str_y,file_path_volumes)
+            normalization(file_path_str_y, file_path_volumes, voxel_size, 'w')
+
+            % select anatomical and bias corrected volumes
+            file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_str, '^msub.*\.nii$'));
+            
+            % run
+            voxel_size = [0.8 0.8 0.8];
+            normalization(file_path_str_y, file_path_volumes, voxel_size, 'w08')
+            
+            % normalize also with
+            voxel_size = [2 2 2];
+            normalization(file_path_str_y, file_path_volumes, voxel_size, 'w2')
 
         end
         
@@ -145,12 +151,11 @@ for s=1:numel(sub_all)
             % run
             smoothing(file_path_volumes_norm)
 
-
             % select normalized volumes
-            file_path_volumes_norm = cellstr(spm_select('ExtFPListRec', folder_path_str, '^w.*\.nii$'));
+            %file_path_volumes_norm = cellstr(spm_select('ExtFPListRec', folder_path_str, '^w.*\.nii$'));
         
             % run
-            smoothing(file_path_volumes_norm)
+            %smoothing(file_path_volumes_norm)
 
         end
         

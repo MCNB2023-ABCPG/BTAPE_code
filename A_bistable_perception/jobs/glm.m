@@ -50,11 +50,13 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
     if add_mask
     mask = spm_select('ExtFPListRec', folder_path_derivative_anat, '^smask_all_rethresh.*$');
-    job{1}.spm.stats.fmri_spec.mthresh = 0.2;
     job{1}.spm.stats.fmri_spec.mask = {mask};
     end
 
-
+    % masking threshhold
+    job{1}.spm.stats.fmri_spec.mthresh = 0.8;
+    
+    % Autocorrelation
     job{1}.spm.stats.fmri_spec.cvi = 'AR(1)';
     %job{1}.spm.stats.fmri_spec.cvi = 'none';
     
