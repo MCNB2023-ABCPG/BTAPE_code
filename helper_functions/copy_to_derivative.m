@@ -2,6 +2,9 @@ function copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, fo
 
 %load(fullfile(folder_path_root,'code','exp_var.mat'))
 load(fullfile(folder_path_code, 'exp_var.mat'));
+addpath(spm_path);
+spm('defaults', 'fmri');
+spm_jobman('initcfg');
 
 
 for s=1:numel(sub_all)

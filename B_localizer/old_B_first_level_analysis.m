@@ -15,8 +15,6 @@ save_constrasts = 1;
 load(fullfile(folder_path_code, 'exp_var.mat'))
 
 conditions = [];
-
-conditions = [];
 conditions{1}.name = 'L';
 conditions{1}.identity = 1;
 conditions{2}.name = 'R';
@@ -25,38 +23,28 @@ conditions{2}.identity = 2;
 % add motion parameters
 add_motion = 1;
 
-% add mask
-add_mask = 0;
-
 n_run = numel(folder_base_pipeline.runNameFunc);
 
 contrasts = [];
-
-contrasts = [];
-contrasts{1}.type = 't';
 contrasts{1}.name = 'L>Null';
+%contrasts{1}.weights = [repmat([1 0],1,n_run) repelem(0,6) repelem(0,n_run)];
 contrasts{1}.weights = [1 0 repelem(0,6)];
 contrasts{1}.sessrep = 'replsc';
 
-contrasts{2}.type = 't';
 contrasts{2}.name = 'R>Null';
+%contrasts{2}.weights = [repmat([0 1],1,n_run) repelem(0,6) repelem(0,n_run)];
 contrasts{2}.weights = [0 1 repelem(0,6)];
 contrasts{2}.sessrep = 'replsc';
 
-contrasts{3}.type = 't';
 contrasts{3}.name = 'L>R';
+%contrasts{3}.weights = [repmat([1 -1],1,n_run) repelem(0,6) repelem(0,n_run)];
 contrasts{3}.weights = [1 -1 repelem(0,6)];
 contrasts{3}.sessrep = 'replsc';
 
-contrasts{4}.type = 't';
 contrasts{4}.name = 'R>L';
+%contrasts{4}.weights = [repmat([-1 1],1,n_run) repelem(0,6) repelem(0,n_run)];
 contrasts{4}.weights = [-1 1 repelem(0,6)];
 contrasts{4}.sessrep = 'replsc';
-
-contrasts{5}.type = 'f';
-contrasts{5}.name = 'F Motion';
-contrasts{5}.weights = [repelem(0, 6, 2) eye(6)];
-contrasts{5}.sessrep = 'replsc';
 
 
 if save_conditions == 1
@@ -109,7 +97,7 @@ for s=1:numel(sub_all)
         if any(switch_prep == 1)
 
             % run
-            glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_derivative_anat, folder_path_log, run_ses, conditions, s, file_path_info, add_motion, add_mask)
+            glm(folder_path_derivative_glm, folder_path_derivative_func, folder_path_log, run_ses, conditions, s, file_path_info, add_motion);
         end
 
 

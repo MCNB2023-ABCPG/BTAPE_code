@@ -29,7 +29,7 @@ end
 
 % -------- DATA MANIPULATION -------- %
 % copy files to derivative
-%copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % preprocessing
 B_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
