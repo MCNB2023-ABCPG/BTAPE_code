@@ -82,7 +82,7 @@ for s=1:numel(sub_all)
             % select files
             file_path_ses = [];
             for r=1:numel(run_ses)
-                pattern = strcat('^.*','run-', run_ses{r}, '.*\.nii$');
+                pattern = strcat('^sub.*','run-', run_ses{r}, '.*\.nii$');
                 file_path_run = cellstr(spm_select('ExtFPListRec', folder_path_derivative_func, pattern));
                 
                 file_path_ses = [file_path_ses {file_path_run}];
@@ -125,6 +125,7 @@ for s=1:numel(sub_all)
         
             % select volumes
             file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_run, '^sub.*\.nii$', 1:360));
+            %file_path_volumes = cellstr(spm_select('ExtFPListRec', folder_path_run, '^rsub.*\.nii$', 1:360));
             voxel_size = [2 2 2];
 
             % run
@@ -147,6 +148,7 @@ for s=1:numel(sub_all)
         if any(switch_prep == 5)
             % select normalized volumes
             file_path_volumes_norm = cellstr(spm_select('ExtFPListRec', folder_path_run, '^w.*\.nii$', 1:360));
+            %file_path_volumes_norm = cellstr(spm_select('ExtFPListRec', folder_path_run, '^wr.*\.nii$', 1:360));
         
             % run
             smoothing(file_path_volumes_norm)

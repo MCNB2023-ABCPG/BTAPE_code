@@ -11,6 +11,7 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
     for i = 1:numel(run_ses)
 
     pattern = strcat('^sw.*','run-', run_ses{i}, '.*\.nii$');
+    %pattern = strcat('^swr.*','run-', run_ses{i}, '.*\.nii$');
     file_path_run = cellstr(spm_select('ExtFPListRec', folder_path_derivative_func, pattern));
     job{1}.spm.stats.fmri_spec.sess(i).scans = file_path_run;
     
@@ -21,11 +22,11 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
     condition = conditions{j}.identity;
 
     %onset = get_onset(file_path_log, condition);
-    onset = get_onset_ext(file_path_log, file_path_info, condition, s, 1);
+    [onset, offset] = get_onset_ext(file_path_log, file_path_info, condition, s, 1);
     
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).name = conditions{j}.name;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).onset = onset;
-    job{1}.spm.stats.fmri_spec.sess(i).cond(j).duration = 24;
+    job{1}.spm.stats.fmri_spec.sess(i).cond(j).duration = 24-offset;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).tmod = 0;
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).pmod = struct('name', {}, 'param', {}, 'poly', {});
     job{1}.spm.stats.fmri_spec.sess(i).cond(j).orth = 1;
@@ -49,10 +50,13 @@ function glm(folder_path_derivative_glm, folder_path_derivative_func, folder_pat
 
 
     if add_mask
-    mask = spm_select('ExtFPListRec', folder_path_derivative_anat, '^smask_all_rethresh.*$');
-    job{1}.spm.stats.fmri_spec.mask = {mask};
+        mask = spm_select('ExtFPListRec', folder_path_derivative_anat, '^smask_all_rethresh.*$');
+        job{1}.spm.stats.fmri_spec.mask = {mask};
+    else
+        job{1}.spm.stats.fmri_spec.mask = 'None';
     end
 
+    
     % masking threshhold
     job{1}.spm.stats.fmri_spec.mthresh = 0.8;
     

@@ -1,4 +1,4 @@
-function [onset] = get_onset(file_path_log, file_path_info, condition, s, offset)
+function [onset, offset] = get_onset_ext(file_path_log, file_path_info, condition, s, add_offset)
 load(file_path_log);
 T = readtable(file_path_info);
 
@@ -11,11 +11,13 @@ end
 
 onset = log.onset(log.conditions == condition);
 onset = transpose(onset);
-if offset
+if add_offset
     offset = T{T.sub_nr == s, table_cond};
-    onset = transpose(onset);
-else
+    offset = (offset*800)/1000;
     onset = onset + offset;
+else
+    offset = 0;
 end
+
 
 end

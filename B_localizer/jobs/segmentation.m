@@ -1,7 +1,7 @@
 function segmentation(str_vols, spm_path_nii_list)
 job = [];
 job{1}.spm.spatial.preproc.channel.vols = {str_vols};
-job{1}.spm.spatial.preproc.channel.biasreg = 0.001;
+job{1}.spm.spatial.preproc.channel.biasreg = 0.0001;
 job{1}.spm.spatial.preproc.channel.biasfwhm = 60;
 job{1}.spm.spatial.preproc.channel.write = [0 1];
 job{1}.spm.spatial.preproc.tissue(1).tpm = {spm_path_nii_list{1}};
