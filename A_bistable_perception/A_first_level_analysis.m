@@ -8,7 +8,7 @@ spm_jobman('initcfg')
 % specifying the steps: fill in switch_prep
 % 1 - model specification and estimation
 % 2 - contrast
-switch_prep = [1 2];
+switch_prep = [2];
 save_conditions = 1;
 save_constrasts = 1;
 
@@ -55,6 +55,12 @@ contrasts{5}.type = 'f';
 contrasts{5}.name = 'F Motion';
 contrasts{5}.weights = [repelem(0, 6, 2) eye(6)];
 contrasts{5}.sessrep = 'replsc';
+
+contrasts{6}.type = 't';
+contrasts{6}.name = 'T Cond Average';
+contrasts{6}.weights = [1 1 repelem(0,8)];
+contrasts{6}.sessrep = 'replsc';
+
 
 
 if save_conditions == 1

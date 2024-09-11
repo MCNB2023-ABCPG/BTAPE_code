@@ -2,7 +2,7 @@ function B_main()
 
 % -------- INIT VARIABLES -------- %
 % specify 
-folder_path_root = '/Users/pschm/BTAPE_local';
+folder_path_root = '/Users/pschm/BTAPE_local_new';
 spm_path = '/Users/pschm/spm12_dev_main';
 folder_path_code = '/Users/pschm/icloud_link/University/mcnb/2_semester/NMP/BTAPE_code';
 
@@ -35,7 +35,7 @@ copy_to_derivative(folder_path_root, folder_base_pipeline, spm_path, folder_path
 B_preprocessing(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 % first-level analysis
-B_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
+%B_first_level_analysis(folder_path_root, folder_base_pipeline, spm_path, folder_path_code)
 
 
 % -------- CLEANUP -------- %

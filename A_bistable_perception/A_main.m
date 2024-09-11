@@ -2,7 +2,7 @@ function A_main()
 
 % -------- INIT VARIABLES -------- %
 % specify 
-folder_path_root = '/Users/pschm/BTAPE_local';
+folder_path_root = '/Users/pschm/BTAPE_local_new';
 spm_path = '/Users/pschm/spm12_dev_main';
 folder_path_code = '/Users/pschm/icloud_link/University/mcnb/2_semester/NMP/BTAPE_code';
 
